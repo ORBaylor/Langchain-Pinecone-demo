@@ -20,6 +20,7 @@ const question = "What is my tire size";
 const indexName = "your-pinecone-index-name";
 const vectorDomension = 1536;
 
+//Initialize Pinecone client with API key and enviroment 
 const client = new PineconeClient();
 await client.init({
     apiKey: process.env.PINECONE_API_KEY,
@@ -28,7 +29,12 @@ await client.init({
 
 //This is the only method on the page that will run
 (async () => {
-
+//Check if pinecone index exist and create if nessary
+await createPineconeIndex(client, indexName, vectorDomension);
+//Update Pinecone  vector store with document embeddings
+await updatePinecone(client, indexName, question);
+//Query Pinecone vector store and GPT model for an answer
+await queryPineconeVectorStoreAndQueryLLM(client, indexName, question)
 
 
 
