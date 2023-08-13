@@ -1,5 +1,5 @@
 
-export const createPineconeIndex = async (
+export const createPinconeIndex = async (
     client,
     indexName,
     vectorDomension
@@ -15,7 +15,7 @@ export const createPineconeIndex = async (
     //If index doesnt creation initiation
     console.log(`Creating "${indexName}"...`)
     //Create index
-    const createClient = await client.createClient({
+    const createClient = await client.createIndex({
         createRequest: {
             name: indexName,
             dimeension: vectorDomension,
@@ -32,3 +32,4 @@ export const createPineconeIndex = async (
     }
    
 }
+

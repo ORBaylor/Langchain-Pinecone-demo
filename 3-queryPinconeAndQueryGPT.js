@@ -18,7 +18,7 @@ export const queryPineconeVectorStoreAndQueryLLM = async (
 // 3. Start query process
 console.log("Querying Pinecone vector store...");
 // 4. Retrieve the Pinecone index
-const index = client.index(idexName);
+const index = client.Index(idexName);
 // 5. Create query embedding
 const queryEmbedding = await new OpenAIEmbeddings().embedQuery(question);
 // 6. Query Pinecone index and return top 10 matches
@@ -32,18 +32,34 @@ let queryResponse = await index.query({
     
 })
 // 7. Log the number of matches 
-//18:32
+console.log(`Found ${queryResponse.matches.length} matches...`)
 // 8. Log the question being asked
-
+console.log(`Question being asked: ${question}...`)
+if(queryResponse.matches.length){
 // 9. Create an OpenAI instance and load the QAStuffChain
-
+const llm = new OpenAI({
+    temperature: 0,
+})
+const chain = loadQAStuffChain(llm);
 // 10. Extract and concatenate page content from matched documents
-
+const concatenatePageContent = queryResponse.matches.map((match) => match.metadata.pageContent).join(" ");
 // 11. Execute the chain with input documents and question
-
+const result = await chain.call({
+    input_documents: [new Document({pageContent: concatenatePageContent})],
+    question: question,
+})
 // 12. Log the answer
+console.log(`Answer: ${result.text}`)
+}
 
+else{
 // 13. Log that there are no matches, so GPT-3 will not be queried
+console.log(`No Matches, GPT not queried`)
+}
+
+
+
+
 
 
 };
