@@ -38,7 +38,8 @@ console.log(`Question being asked: ${question}...`)
 if(queryResponse.matches.length){
 // 9. Create an OpenAI instance and load the QAStuffChain
 const llm = new OpenAI({
-    temperature: 0,
+    temperature: 0.9,
+    modelName: "gpt-3.5-turbo"
 })
 const chain = loadQAStuffChain(llm);
 // 10. Extract and concatenate page content from matched documents
